@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student/db/functions.dart/db_functions.dart';
 import 'package:student/db/model/data_model.dart';
+import 'package:student/pages/search.dart';
 
 class home extends StatefulWidget {
   const home({super.key});
@@ -18,138 +19,147 @@ class _homeState extends State<home> {
   final _ageController = TextEditingController();
   final _domainController = TextEditingController();
   final _placeController = TextEditingController();
-
   String? file;
   ImagePicker image = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     getStudents();
+
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        // resizeToAvoidBottomInset: false,
         appBar: getappbar(context: context, title: 'ADD STUDENTS'),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              GetImage(),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: TextField(
-                    controller: _nameController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.text_fields,
-                        color: Colors.orange,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                GetImage(),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: SizedBox(
+                    width: 350,
+                    height: 50,
+                    child: TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.text_fields,
+                          color: Colors.orange,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        hintText: 'Enter Name',
+                        filled: true,
+                        fillColor: Colors.brown[100],
+                        isDense: true, // Added this
+                        contentPadding: const EdgeInsets.all(18),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      hintText: 'Enter Name',
-                      filled: true,
-                      fillColor: Colors.brown[100],
-                      isDense: true, // Added this
-                      contentPadding: const EdgeInsets.all(18),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: TextField(
-                    controller: _ageController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.numbers,
-                        color: Colors.orange,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: 350,
+                    height: 50,
+                    child: TextField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.numbers,
+                          color: Colors.orange,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        hintText: 'Enter Age',
+                        filled: true,
+                        fillColor: Colors.brown[100],
+                        isDense: true, // Added this
+                        contentPadding: const EdgeInsets.all(18),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      hintText: 'Enter Age',
-                      filled: true,
-                      fillColor: Colors.brown[100],
-                      isDense: true, // Added this
-                      contentPadding: const EdgeInsets.all(18),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: TextField(
-                    controller: _domainController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.text_fields,
-                        color: Colors.orange,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: 350,
+                    height: 50,
+                    child: TextField(
+                      controller: _domainController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.text_fields,
+                          color: Colors.orange,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        hintText: 'Enter Domain',
+                        filled: true,
+                        fillColor: Colors.brown[100],
+                        isDense: true, // Added this
+                        contentPadding: const EdgeInsets.all(18),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      hintText: 'Enter Domain',
-                      filled: true,
-                      fillColor: Colors.brown[100],
-                      isDense: true, // Added this
-                      contentPadding: const EdgeInsets.all(18),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: 350,
-                  height: 50,
-                  child: TextField(
-                    controller: _placeController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        Icons.place,
-                        color: Colors.orange,
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: SizedBox(
+                    width: 350,
+                    height: 50,
+                    child: TextField(
+                      controller: _placeController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.place,
+                          color: Colors.orange,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                        ),
+                        hintText: 'Enter Place',
+                        filled: true,
+                        fillColor: Colors.brown[100],
+                        isDense: true, // Added this
+                        contentPadding: const EdgeInsets.all(18),
                       ),
-                      border: OutlineInputBorder(
-                        //borderSide: BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      hintText: 'Enter Place',
-                      filled: true,
-                      fillColor: Colors.brown[100],
-                      isDense: true, // Added this
-                      contentPadding: const EdgeInsets.all(18),
                     ),
                   ),
                 ),
-              ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Addstudentbtn();
-                  Navigator.of(context).pushReplacementNamed('list');
-                },
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(350, 55),
-                  backgroundColor: Colors.orange[500],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Addstudentbtn();
+                    Navigator.of(context).pushReplacementNamed('list');
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(350, 55),
+                    backgroundColor: Colors.orange[500],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    elevation: 10,
                   ),
-                  elevation: 10,
-                ),
-                icon: Icon(Icons.add),
-                label: Text('ADD'),
-              )
-            ],
+                  icon: Icon(Icons.add),
+                  label: Text('ADD'),
+                )
+              ],
+            ),
           ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: (() {
+            Navigator.pushReplacementNamed(context, 'list');
+          }),
+          child: Icon(Icons.list),
         ),
       ),
     );
@@ -220,6 +230,15 @@ AppBar getappbar({
     centerTitle: true,
     elevation: 0,
     backgroundColor: Colors.white,
+    actions: [
+      IconButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
+              return SearchScreen();
+            })));
+          },
+          icon: Icon(Icons.search_sharp))
+    ],
     title: Text(
       title,
       style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w800),
