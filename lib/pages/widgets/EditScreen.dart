@@ -1,10 +1,12 @@
-// ignore_for_file: must_be_immutable, no_leading_underscores_for_local_identifiers, non_constant_identifier_names
+// ignore_for_file: must_be_immutable
+
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:student/pages/home.dart';
-import '../../db/functions.dart/db_functions.dart';
+import 'package:student/student_bloc/student_bloc.dart';
 import '../../db/model/data_model.dart';
 import '../list.dart';
 
@@ -26,32 +28,12 @@ class _EditProfileState extends State<EditProfile> {
   final _placeController = TextEditingController();
   String? imagePath;
 
-  Future<void> StudentAddBtn(int index) async {
-    final _name = _nameController.text.trim();
-    final _age = _ageController.text.trim();
-    final _place = _placeController.text.trim();
-    final _domain = _domainController.text.trim();
-    if (_name.isEmpty || _age.isEmpty || _domain.isEmpty || _place.isEmpty) {
-      return;
-    }
-    final _students = StudentModel(
-      name: _name,
-      age: _age,
-      domain: _domain,
-      place: _place,
-      image: imagePath!,
-    );
-    final studentDB = await Hive.openBox<StudentModel>('student_db');
-    studentDB.putAt(index, _students);
-    getStudents();
-  }
-
   Future<void> takePhoto() async {
-    final PickedFile =
+    final pickedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (PickedFile != null) {
+    if (pickedFile != null) {
       setState(() {
-        imagePath = PickedFile.path;
+        imagePath = pickedFile.path;
       });
     }
   }
@@ -59,13 +41,13 @@ class _EditProfileState extends State<EditProfile> {
   Widget elavatedbtn() {
     return ElevatedButton.icon(
       onPressed: () {
-        StudentAddBtn(widget.index);
+        // StudentAddBtn(widget.index);
+        // final student=StudentModel()
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (ctx) => const list()),
-            (route) => false);
+            MaterialPageRoute(builder: (ctx) => List()), (route) => false);
       },
       style: ElevatedButton.styleFrom(
-        minimumSize: Size(350, 55),
+        minimumSize: const Size(350, 55),
         backgroundColor: Colors.orange[500],
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
@@ -129,7 +111,28 @@ class _EditProfileState extends State<EditProfile> {
           padding: const EdgeInsets.all(15.0),
           child: SingleChildScrollView(
             child: Column(children: <Widget>[
-              dpImage(),
+              // dpImage(),
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 75,
+                    backgroundImage: imagePath == null
+                        ? FileImage(File(widget.passValueProfile.image))
+                        : FileImage(File(imagePath!)),
+                  ),
+                  Positioned(
+                      bottom: 2,
+                      right: 10,
+                      child: InkWell(
+                          child: const Icon(
+                            Icons.photo,
+                            size: 30,
+                          ),
+                          onTap: () {
+                            takePhoto();
+                          })),
+                ],
+              ),
               szdBox,
               textFieldName(
                   myController: _nameController,
@@ -147,7 +150,38 @@ class _EditProfileState extends State<EditProfile> {
                   myController: _placeController,
                   hintName: widget.passValueProfile.place),
               szdBox,
-              elavatedbtn(),
+              // elavatedbtn(),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // StudentAddBtn(widget.index);
+                  final student = StudentModel(
+                    name: _nameController.text,
+                    age: _ageController.text,
+                    domain: _domainController.text,
+                    place: _placeController.text,
+                    image: imagePath.toString(),
+                  );
+                  context.read<StudentBloc>().add(
+                        EditData(
+                          studentModel: student,
+                          index: widget.index,
+                        ),
+                      );
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (ctx) => List()),
+                      (route) => false);
+                },
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(350, 55),
+                  backgroundColor: Colors.orange[500],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  elevation: 10,
+                ),
+                icon: const Icon(Icons.upgrade),
+                label: const Text('Update'),
+              ),
             ]),
           ),
         ));

@@ -1,20 +1,20 @@
-// ignore_for_file: camel_case_types, prefer_const_constructors, no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student/db/functions.dart/db_functions.dart';
 import 'package:student/db/model/data_model.dart';
 import 'package:student/pages/search.dart';
 
-class home extends StatefulWidget {
-  const home({super.key});
+import '../student_bloc/student_bloc.dart';
+
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<home> createState() => _homeState();
+  State<Home> createState() => _HomeState();
 }
 
-class _homeState extends State<home> {
+class _HomeState extends State<Home> {
   final _nameController = TextEditingController();
   final _ageController = TextEditingController();
   final _domainController = TextEditingController();
@@ -24,7 +24,7 @@ class _homeState extends State<home> {
 
   @override
   Widget build(BuildContext context) {
-    getStudents();
+    // getStudents();
 
     return SafeArea(
       child: Scaffold(
@@ -36,7 +36,7 @@ class _homeState extends State<home> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GetImage(),
+                getImage(),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: SizedBox(
@@ -45,7 +45,7 @@ class _homeState extends State<home> {
                     child: TextField(
                       controller: _nameController,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.text_fields,
                           color: Colors.orange,
                         ),
@@ -70,7 +70,7 @@ class _homeState extends State<home> {
                       controller: _ageController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.numbers,
                           color: Colors.orange,
                         ),
@@ -94,7 +94,7 @@ class _homeState extends State<home> {
                     child: TextField(
                       controller: _domainController,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.text_fields,
                           color: Colors.orange,
                         ),
@@ -118,7 +118,7 @@ class _homeState extends State<home> {
                     child: TextField(
                       controller: _placeController,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(
+                        prefixIcon: const Icon(
                           Icons.place,
                           color: Colors.orange,
                         ),
@@ -136,19 +136,30 @@ class _homeState extends State<home> {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {
-                    Addstudentbtn();
+                    // Addstudentbtn();
+                    BlocProvider.of<StudentBloc>(context).add(
+                      AddData(
+                        studentsdata: StudentModel(
+                          name: _nameController.text.trim(),
+                          age: _ageController.text.trim(),
+                          domain: _domainController.text.trim(),
+                          place: _placeController.text.trim(),
+                          image: file!,
+                        ),
+                      ),
+                    );
                     Navigator.of(context).pushReplacementNamed('list');
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size(350, 55),
+                    minimumSize: const Size(350, 55),
                     backgroundColor: Colors.orange[500],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                     elevation: 10,
                   ),
-                  icon: Icon(Icons.add),
-                  label: Text('ADD'),
+                  icon: const Icon(Icons.add),
+                  label: const Text('ADD'),
                 )
               ],
             ),
@@ -159,28 +170,28 @@ class _homeState extends State<home> {
           onPressed: (() {
             Navigator.pushReplacementNamed(context, 'list');
           }),
-          child: Icon(Icons.list),
+          child: const Icon(Icons.list),
         ),
       ),
     );
   }
 
 //add student on clicking button
-  Future<void> Addstudentbtn() async {
-    final _name = _nameController.text.trim();
-    final _age = _ageController.text.trim();
-    final _domain = _domainController.text.trim();
-    final _place = _placeController.text.trim();
+  // Future<void> Addstudentbtn() async {
+  //   final _name = _nameController.text.trim();
+  //   final _age = _ageController.text.trim();
+  //   final _domain = _domainController.text.trim();
+  //   final _place = _placeController.text.trim();
 
-    if (_name.isEmpty || _age.isEmpty || _domain.isEmpty || _place.isEmpty) {
-      return;
-    }
-    //print('$_name $_age $_domain $_place');
+  //   if (_name.isEmpty || _age.isEmpty || _domain.isEmpty || _place.isEmpty) {
+  //     return;
+  //   }
+  //   //print('$_name $_age $_domain $_place');
 
-    final _student = StudentModel(
-        name: _name, age: _age, domain: _domain, place: _place, image: file!);
-    addStudent(_student);
-  }
+  //   final _student = StudentModel(
+  //       name: _name, age: _age, domain: _domain, place: _place, image: file!);
+  //   //addStudent(_student);
+  // }
 
   // image pick from gallery
   getgallery() async {
@@ -193,13 +204,13 @@ class _homeState extends State<home> {
   }
 
   // image picking UI
-  Widget GetImage() {
+  Widget getImage() {
     return Stack(
       children: [
         CircleAvatar(
           radius: 75,
           backgroundImage: file == null
-              ? NetworkImage(
+              ? const NetworkImage(
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWRrWgjZtjvfCpKF-uof_08e89WR9269oYsA&usqp=CAU')
                   as ImageProvider
               : FileImage(File(file!)),
@@ -234,14 +245,15 @@ AppBar getappbar({
       IconButton(
           onPressed: () {
             Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-              return SearchScreen();
+              return const SearchScreen();
             })));
           },
-          icon: Icon(Icons.search_sharp))
+          icon: const Icon(Icons.search_sharp))
     ],
     title: Text(
       title,
-      style: TextStyle(color: Colors.black54, fontWeight: FontWeight.w800),
+      style:
+          const TextStyle(color: Colors.black54, fontWeight: FontWeight.w800),
     ),
   );
 }

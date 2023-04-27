@@ -1,7 +1,6 @@
-// ignore_for_file: sized_box_for_whitespace, must_be_immutable
+// ignore_for_file: must_be_immutable
 
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:student/db/model/data_model.dart';
 import 'package:student/pages/widgets/EditScreen.dart';
@@ -36,7 +35,7 @@ class StudentProfile extends StatelessWidget {
   }
 
   Widget data() {
-    return Container(
+    return SizedBox(
       width: 200,
       height: 100,
       child: Column(
