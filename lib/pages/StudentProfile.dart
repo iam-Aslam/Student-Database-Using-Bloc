@@ -1,5 +1,4 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:student/db/model/data_model.dart';
@@ -18,9 +17,7 @@ class StudentProfile extends StatelessWidget {
 
   StudentModel passValue;
   final int passId;
-
   //functions and widgets
-
   Widget top() {
     final top = coverHeight - profileHeight / 2;
     final bottom = profileHeight / 2;

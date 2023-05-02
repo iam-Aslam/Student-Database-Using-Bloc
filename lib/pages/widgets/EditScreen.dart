@@ -61,6 +61,7 @@ class _EditProfileState extends State<EditProfile> {
 
   Widget textFieldName(
       {required TextEditingController myController, required String hintName}) {
+    myController.text = hintName;
     return TextFormField(
       autofocus: false,
       controller: myController,

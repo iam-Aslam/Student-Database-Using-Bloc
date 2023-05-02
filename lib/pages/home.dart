@@ -176,23 +176,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-//add student on clicking button
-  // Future<void> Addstudentbtn() async {
-  //   final _name = _nameController.text.trim();
-  //   final _age = _ageController.text.trim();
-  //   final _domain = _domainController.text.trim();
-  //   final _place = _placeController.text.trim();
-
-  //   if (_name.isEmpty || _age.isEmpty || _domain.isEmpty || _place.isEmpty) {
-  //     return;
-  //   }
-  //   //print('$_name $_age $_domain $_place');
-
-  //   final _student = StudentModel(
-  //       name: _name, age: _age, domain: _domain, place: _place, image: file!);
-  //   //addStudent(_student);
-  // }
-
   // image pick from gallery
   getgallery() async {
     final img = await ImagePicker().pickImage(source: ImageSource.gallery);
